@@ -2,3 +2,5 @@
 outcmaes
 .idea/*
 _CMAESDataLogger_datadict.py
+**/**/*.pyc
+evaluate/__pycache__/*

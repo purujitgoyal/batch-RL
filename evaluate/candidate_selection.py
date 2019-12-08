@@ -14,7 +14,7 @@ class CandidateSelection:
 
     def __init__(self, candidate_df: pd.DataFrame, safety_df_size: int, num_state_variables: int, num_actions: int,
                  num_features_size: int, theta_b, safety_val: float, confidence=0.9, gamma=1.0):
-        self._candidate_df = candidate_df
+        self._candidate_df = candidate_df.to_numpy()
         self._safe_df_size = safety_df_size
         self._num_states_variables = num_state_variables
         self._num_actions = num_actions
@@ -48,9 +48,12 @@ class CandidateSelection:
         return cma_es.result[0], cma_es.result[1]
 
     def _calculate_pdis(self, theta_c):
-        pdis_h = []
-        for idx, row in self._candidate_df.iterrows():
-            pdis_h.append(self.pdis_eval(row, theta_c, self._theta_b))
+        # pdis_h = []
+        # for idx, row in self._candidate_df.iterrows():
+        #     pdis_h.append(self.pdis_eval(row, theta_c, self._theta_b))
+
+        # pdis_h = self._candidate_df.apply(lambda row: self.pdis_eval(row, theta_c, self._theta_b), axis=1)
+        pdis_h = np.apply_along_axis(lambda row: self.pdis_eval(row, theta_c, self._theta_b), axis=1, arr=self._candidate_df)
 
         # print(pdis_h)
         pdis_h = np.array(pdis_h)

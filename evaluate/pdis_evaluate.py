@@ -17,7 +17,7 @@ class PDISEvaluate:
             list(itertools.product(np.arange(self._num_features_size), repeat=self._num_state_variables)))
         self._gamma = gamma
 
-    def __call__(self, history: pd.Series, theta_e, theta_b):
+    def __call__(self, history: np.array, theta_e, theta_b):
         pi_e = TabularSoftmax(numStates=1, numActions=self._num_actions)
         pi_b = TabularSoftmax(numStates=1, numActions=self._num_actions)
         cum_wt = 1.0
