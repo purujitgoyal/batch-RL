@@ -42,8 +42,10 @@ class CandidateSelection:
             # cma_es.tell(X, [self._calculate_pdis(x) for x in X])
             cma_es.logger.add(modulo=10)
             cma_es.disp(modulo=100)
-            print(cma_es.result[0])
+            # print(cma_es.result[0])
             i += 1
+            if cma_es.stop() and cma_es.result[1] < 100000000:
+                break
 
         return cma_es.result[0], cma_es.result[1]
 
@@ -63,7 +65,7 @@ class CandidateSelection:
         print(pdis_d)
         std_d = np.sqrt(np.sum(np.square(pdis_h - pdis_d)) / (n - 1))
         t_val = stats.t.ppf(self._confidence, self._safe_df_size - 1)
-        if pdis_d - std_d * t_val / np.sqrt(self._safe_df_size) > self._safety_val:
+        if pdis_d - 2*std_d * t_val / np.sqrt(self._safe_df_size) > self._safety_val:
             return -pdis_d
 
         return 100000000
