@@ -1,0 +1,4 @@
+.ipynb_checkpoints/*
+outcmaes
+.idea/*
+_CMAESDataLogger_datadict.py
