@@ -29,8 +29,11 @@ class PDISEvaluate:
             a_t = history[i + self._num_state_variables].astype(int)
             r_t = history[i + self._num_state_variables + 1]
             phi_state = np.cos(np.pi * self._state_feature_vectors.dot(s_t))
-            theta_state_e = theta_e.reshape(phi_state.shape[0], -1).T.dot(phi_state)
-            theta_state_b = theta_b.reshape(phi_state.shape[0], -1).T.dot(phi_state)
+            # print(phi_state)
+            # theta_state_e = theta_e.reshape(phi_state.shape[0], -1).T.dot(phi_state)
+            theta_state_e = theta_e.reshape(self._num_actions, -1).dot(phi_state)
+            theta_state_b = theta_b.reshape(self._num_actions, -1).dot(phi_state)
+            # theta_state_b = theta_b.reshape(phi_state.shape[0], -1).T.dot(phi_state)
             pi_e.parameters = theta_state_e
             pi_b.parameters = theta_state_b
             cum_wt *= pi_e(0, a_t)/pi_b(0, a_t)
