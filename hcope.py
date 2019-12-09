@@ -35,9 +35,6 @@ if __name__ == '__main__':
 
     # test_df = pd.read_csv('test_histories.csv', header=None)
     test_df = pd.read_csv('histories.csv', header=None)
-    msk = np.random.rand(len(test_df)) < 0.4
-    candidate_df = test_df[msk]
-    safety_df = test_df[~msk]
 
     # pdis_eval = PDISEvaluate(1, 2, 2)
     # history = np.array(
@@ -45,11 +42,14 @@ if __name__ == '__main__':
     # theta_c = np.array([0, 0, 0, 0])
     # pdis_eval(history, theta_c, theta_b)
 
-    cs = CandidateSelection(candidate_df=candidate_df, safety_df_size=len(safety_df),
-                            num_state_variables=num_state_variables,
-                            num_actions=num_actions, num_features_size=num_features_size + 1, theta_b=theta_b,
-                            safety_val=safety_val, confidence=0.95)
-    for i in range(1):
+    for i in range(100):
+        msk = np.random.rand(len(test_df)) < 0.4
+        candidate_df = test_df[msk]
+        safety_df = test_df[~msk]
+        cs = CandidateSelection(candidate_df=candidate_df, safety_df_size=len(safety_df),
+                                num_state_variables=num_state_variables,
+                                num_actions=num_actions, num_features_size=num_features_size + 1, theta_b=theta_b,
+                                safety_val=safety_val, confidence=0.95)
         # print(i)
         theta_c, pdis_val = cs(sigma=1, num_iter=50)
         print(theta_c)
