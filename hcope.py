@@ -34,35 +34,42 @@ if __name__ == '__main__':
     safety_val = 1.25
 
     # test_df = pd.read_csv('test_histories.csv', header=None)
-    test_df = pd.read_csv('histories.csv', header=None)
-
+    test_df = pd.read_csv('histories.csv', header=None).fillna(0)
     # pdis_eval = PDISEvaluate(1, 2, 2)
-    # history = np.array(
-    #     [0.419908, 1, 0.992628, 0.366283, 0, 10, 0.0622811, 1, 2.98566, 0.327772, 1, 1.69524, 0.612293, 0, 6.10134])
+    # # history = np.array(
+    # #     [0.419908, 1, 0.992628, 0.366283, 0, 10, 0.0622811, 1, 2.98566, 0.327772, 1, 1.69524, 0.612293, 0, 6.10134])
     # theta_c = np.array([0, 0, 0, 0])
-    # pdis_eval(history, theta_c, theta_b)
+    # print(pdis_eval(test_df.to_numpy(), theta_c, theta_b)) #25.69744378193232
 
-    for i in range(100):
-        msk = np.random.rand(len(test_df)) < 0.4
+    i = 0
+    while i < 100:
+        msk = np.random.rand(len(test_df)) < 0.6
         candidate_df = test_df[msk]
         safety_df = test_df[~msk]
-        cs = CandidateSelection(candidate_df=candidate_df, safety_df_size=len(safety_df),
+        cs = CandidateSelection(candidate_df=candidate_df, safety_df_size=len(test_df),
                                 num_state_variables=num_state_variables,
                                 num_actions=num_actions, num_features_size=num_features_size + 1, theta_b=theta_b,
-                                safety_val=safety_val, confidence=0.95)
+                                safety_val=safety_val, confidence=0.99)
+
+        # cs.calculate_pdis(theta_b)
         # print(i)
         theta_c, pdis_val = cs(sigma=1, num_iter=50)
         print(theta_c)
         print(pdis_val)
-
-        # theta_c = [3.967075,2.961444,2.233000,-2.064813,-3.034357,2.489803,-4.278893,11.016205]
-        # theta_c = np.array(theta_c)
-
+        if pdis_val is None:
+            continue
+        #
+        # # theta_c = [3.967075,2.961444,2.233000,-2.064813,-3.034357,2.489803,-4.278893,11.016205]
+        # # theta_c = np.array(theta_c)
+        #
         st = SafetyTest(safety_df, num_state_variables=num_state_variables, num_actions=num_actions,
                         num_features_size=num_features_size + 1)
 
-        print(st(theta_c, theta_b, safety_val=safety_val, confidence=0.95))
+        safe = st(theta_c, theta_b, safety_val=safety_val, confidence=0.99)
         np.savetxt(str(i) + ".csv", [theta_c], delimiter=",", fmt='%f')
+        if safe:
+            i += 1
+
 
     # for i in range(10):
     #     t = np.random.randn(i)

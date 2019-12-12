@@ -20,8 +20,9 @@ class SafetyTest:
         pdis_h = []
         # for idx, row in self._safety_df.iterrows():
         #     pdis_h.append(pdis_eval(row, theta_c, theta_b))
-        pdis_h = np.apply_along_axis(lambda row: pdis_eval(row, theta_c, theta_b), axis=1, arr=self._safety_df)
-        pdis_h = np.array(pdis_h)
+        # pdis_h = np.apply_along_axis(lambda row: pdis_eval(row, theta_c, theta_b), axis=1, arr=self._safety_df)
+        # pdis_h = np.array(pdis_h)
+        pdis_h = pdis_eval(self._safety_df, theta_c, theta_b)
         n = self._safety_df.shape[0]
         pdis_d = np.mean(pdis_h)
         std_d = np.sqrt(np.sum(np.square(pdis_h - pdis_d)) / (n - 1))
