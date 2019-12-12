@@ -37,15 +37,10 @@ class CandidateSelection:
         # freeze_support()
         while not cma_es.stop():
             X = cma_es.ask()
-            #     print(len(X))
             cma_es.tell(X, self.run_multiprocessing(self.calculate_pdis, X, len(X)))
-            # cma_es.tell(X, [self._calculate_pdis(x) for x in X])
+
             cma_es.logger.add()
             cma_es.disp()
-            # print(cma_es.result[0])
-            # i += 1
-            # if cma_es.stop() and cma_es.result[1] < 100000000:
-            #     break
 
         if cma_es.result[1] == sys.maxsize:
             print("No Policy Found")
@@ -62,10 +57,10 @@ class CandidateSelection:
         # pdis_h = np.apply_along_axis(lambda row: self.pdis_eval(row, theta_c, self._theta_b), axis=1,
                                      # arr=self._candidate_df)
         pdis_h = self.pdis_eval(self._candidate_df, theta_c, self._theta_b)
-        # print(pdis_h)
+
         # pdis_h = np.array(pdis_h)
         n = self._candidate_df.shape[0]
-        # print(pdis_h)
+
         pdis_d = np.mean(pdis_h)
         print(pdis_d)
         std_d = np.sqrt(np.sum(np.square(pdis_h - pdis_d)) / (n - 1))
