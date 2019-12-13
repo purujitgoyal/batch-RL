@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
         safe = st(theta_c, theta_b, safety_val=safety_val, confidence=0.99)
         if safe:
-            np.savetxt(str(i) + ".csv", [theta_c], delimiter=",", fmt='%f')
+            np.savetxt("output/" + str(i) + ".csv", [theta_c], delimiter=",", fmt='%f')
             i += 1
 
 
