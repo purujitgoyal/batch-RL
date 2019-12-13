@@ -4,3 +4,4 @@ outcmaes
 _CMAESDataLogger_datadict.py
 **/**/*.pyc
 evaluate/__pycache__/*
+output/.ipynb_checkpoints
